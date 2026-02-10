@@ -13,22 +13,30 @@
     align-items: center;
     flex-direction: column;
     background: url('WhatsApp Image 2026-02-10 at 4.38.53 PM.jpeg') no-repeat center center;
-    background-size: contain;
-    background-color: black; /* fills empty space */
+    background-size: cover; /* Desktop default */
+    background-color: black;
     font-family: 'Arial', sans-serif;
     overflow: hidden;
   }
+
+  /* Mobile specific background */
+  @media only screen and (max-width: 768px) {
+    body {
+      background-size: contain;
+    }
+  }
+
 h1 {
     color: white;
     text-align: center;
     margin-bottom: 20px;
     text-shadow: 2px 2px 5px #000;
-    font-size: 23px; /* smaller than before */
+    font-size: 23px;
 }
 
 button {
-    padding: 10px 20px; /* slightly smaller buttons */
-    font-size: 10px;     /* smaller text */
+    padding: 10px 20px;
+    font-size: 10px;
     margin: 10px;
     border: none;
     border-radius: 8px;
