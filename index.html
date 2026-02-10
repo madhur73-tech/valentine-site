@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glowing Beating Heart with Rain</title>
+
+<!-- Handwritten Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background-color: black;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Heart container */
+  a svg {
+    width: 150px;
+    height: 150px;
+    overflow: visible;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  .heart-shape {
+    fill: red;
+    transform-origin: center;
+    animation: heartbeat 1s infinite;
+  }
+
+  .heart-glow {
+    fill: red;
+    filter: blur(15px);
+    opacity: 0.6;
+    transform-origin: center;
+    animation: glow 1s infinite;
+  }
+
+  /* Click text */
+  .click-text {
+    margin-top: 14px;
+    font-family: 'Pacifico', cursive;
+    font-size: 26px;
+    color: white;
+    text-shadow:
+      0 0 5px #ff4d6d,
+      0 0 10px #ff1e56,
+      0 0 20px #ff1e56;
+    animation: textPulse 1.5s infinite;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14% { transform: scale(1.3); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.25); }
+    70% { transform: scale(1); }
+  }
+
+  @keyframes glow {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    14% { transform: scale(1.5); opacity: 0.3; }
+    28% { transform: scale(1); opacity: 0.6; }
+    42% { transform: scale(1.4); opacity: 0.4; }
+    70% { transform: scale(1); opacity: 0.6; }
+  }
+
+  @keyframes textPulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Falling stars and hearts */
+  .falling {
+    position: absolute;
+    top: -50px;
+    font-size: 16px;
+    color: white;
+    animation: fall linear infinite;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .falling.heart {
+    color: red;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+
+<body>
+
+<a href="valentine1.html">
+  <svg viewBox="0 0 32 29.6">
+    <path class="heart-glow" d="M23.6,0c-3,0-5.6,1.7-7.6,4.3C14,1.7,11.4,0,8.4,0C3.7,0,0,3.7,0,8.4
+            c0,4.5,3.4,8.2,8.6,13.1l7.4,7.1l7.4-7.1C28.6,16.6,32,12.9,32,8.4C32,3.7,28.3,0,23.6,0z"/>
+    <path class="heart-shape" d="M23.6,0c-3,0-5.6,1.7-7.6,4.3C14,1.7,11.4,0,8.4,0C3.7,0,0,3.7,0,8.4
+            c0,4.5,3.4,8.2,8.6,13.1l7.4,7.1l7.4-7.1C28.6,16.6,32,12.9,32,8.4C32,3.7,28.3,0,23.6,0z"/>
+  </svg>
+</a>
+
+<div class="click-text">Click on the Heart!</div>
+
+<script>
+  const body = document.body;
+  const symbols = ['⭐','❤️'];
+  const count = 50;
+
+  for (let i = 0; i < count; i++) {
+    const elem = document.createElement('div');
+    elem.classList.add('falling');
+    elem.textContent = symbols[Math.random() < 0.5 ? 0 : 1];
+    elem.style.left = Math.random() * window.innerWidth + 'px';
+    elem.style.animationDuration = (3 + Math.random() * 5) + 's';
+    elem.style.fontSize = (12 + Math.random() * 24) + 'px';
+    elem.style.opacity = Math.random();
+    elem.style.animationDelay = (Math.random() * 5) + 's';
+    if (elem.textContent === '❤️') elem.classList.add('heart');
+    body.appendChild(elem);
+  }
+</script>
+
+</body>
+</html>
