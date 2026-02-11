@@ -4,110 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Question</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: url('IMG_1571.JPG.jpeg') no-repeat center center;
-    background-size: cover; /* Desktop default */
-    background-color: black;
-    font-family: 'Arial', sans-serif;
-    overflow: hidden;
-  }
 
-  /* Mobile specific background */
-  @media only screen and (max-width: 768px) {
-    body {
-      background-size: contain;
-    }
-  }
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: url('WhatsApp Image 2026-02-11 at 1.55.46 PM.jpeg') no-repeat center center;
+  background-size: cover;
+  background-color: black;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+@media only screen and (max-width: 768px) {
+  body { background-size: contain; }
+}
 
 h1 {
-    color: white;
-    text-align: center;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 5px #000;
-    font-size: 23px;
+  color: black;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 23px;
+  font-family: cursive;
+  z-index: 2;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 10px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s;
-    z-index: 2;
-    position: relative;
+  padding: 10px 20px;
+  font-size: 12px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  z-index: 2;
+  position: relative;
 }
-  button:hover {
-    transform: scale(1.1);
-  }
-  #emoji-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-  }
+
+button:hover { transform: scale(1.1); }
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* Floating hearts */
+@keyframes floatUp {
+  to { transform: translateY(-110vh); opacity: 0; }
+}
+
+/* Screen shake */
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-5px,5px); }
+  40% { transform: translate(5px,-5px); }
+  60% { transform: translate(-5px,5px); }
+  80% { transform: translate(5px,-5px); }
+  100% { transform: translate(0,0); }
+}
+
+.shake {
+  animation: shake 0.3s infinite;
+}
 </style>
 </head>
+
 <body>
 
-<h1>Will you be my Valentine? ❤️</h1>
+<h1 id="question"></h1>
+
 <div>
   <button id="yesBtn" style="background-color: #ff4d6d; color:white;">Yes</button>
   <button id="noBtn" style="background-color: #ccc; color:black;">No</button>
 </div>
 
-<div id="emoji-container"></div>
 <canvas id="fireworksCanvas"></canvas>
 
 <script>
-// ================= Emoji rain for "No" =================
-const noBtn = document.getElementById('noBtn');
-const yesBtn = document.getElementById('yesBtn');
-const emojiContainer = document.getElementById('emoji-container');
 
-function spawnEmoji(count){
-  for(let i=0; i<count; i++){
-    const emoji = document.createElement('div');
-    emoji.textContent = ['😭','🥹'][Math.floor(Math.random()*5)];
-    emoji.style.position = 'absolute';
-    emoji.style.left = Math.random() * window.innerWidth + 'px';
-    emoji.style.top = Math.random() * window.innerHeight + 'px';
-    emoji.style.fontSize = (20 + Math.random()*40) + 'px';
-    emoji.style.animation = `fall ${2 + Math.random()*3}s linear forwards`;
-    emojiContainer.appendChild(emoji);
+// ================= Typing Effect =================
+const text = "Will you be my Valentine? ❤️";
+const question = document.getElementById("question");
+let index = 0;
+
+function typeEffect() {
+  if (index < text.length) {
+    question.innerHTML += text.charAt(index);
+    index++;
+    setTimeout(typeEffect, 80);
   }
 }
+typeEffect();
 
-noBtn.addEventListener('click', () => {
-  spawnEmoji(50);
+
+// ================= Floating Hearts =================
+let heartsInterval = setInterval(floatingHearts, 500);
+
+function floatingHearts() {
+  const heart = document.createElement("div");
+  heart.innerHTML = "❤️";
+  heart.style.position = "absolute";
+  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.bottom = "-20px";
+  heart.style.fontSize = (15 + Math.random() * 25) + "px";
+  heart.style.opacity = Math.random();
+  heart.style.animation = "floatUp 6s linear forwards";
+  heart.style.pointerEvents = "none";
+  heart.style.zIndex = "1";
+
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}
+
+
+// ================= Runaway No Button =================
+const noBtn = document.getElementById('noBtn');
+const yesBtn = document.getElementById('yesBtn');
+
+let yesScale = 1;
+
+noBtn.addEventListener('mouseover', () => {
+  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  yesScale += 0.2;
+  yesBtn.style.transform = `scale(${yesScale})`;
 });
 
-const style = document.createElement('style');
-style.textContent = `
-@keyframes fall {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}`;
-document.head.appendChild(style);
 
-// ================= Heart-shaped Fireworks =================
+// ================= Fireworks =================
 const canvas = document.getElementById('fireworksCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -115,6 +151,7 @@ canvas.height = window.innerHeight;
 
 let fireworks = [];
 let particles = [];
+let animationRunning = true;
 
 class Firework {
   constructor(sx, sy, tx, ty) {
@@ -126,27 +163,21 @@ class Firework {
     this.ty = ty;
     this.distanceToTarget = distance(sx, sy, tx, ty);
     this.distanceTraveled = 0;
-    this.coordinates = [];
-    this.coordinateCount = 3;
-    while(this.coordinateCount--) {
-      this.coordinates.push([this.x, this.y]);
-    }
     this.angle = Math.atan2(ty - sy, tx - sx);
-    this.speed = 2 + Math.random() * 3;
+    this.speed = 3;
     this.acceleration = 1.05;
-    this.brightness = Math.random() * 50 + 50;
   }
 
   update(index) {
-    this.coordinates.pop();
-    this.coordinates.unshift([this.x, this.y]);
     this.speed *= this.acceleration;
     let vx = Math.cos(this.angle) * this.speed;
     let vy = Math.sin(this.angle) * this.speed;
+
     this.distanceTraveled = distance(this.sx, this.sy, this.x + vx, this.y + vy);
-    if(this.distanceTraveled >= this.distanceToTarget) {
-      createHeartParticles(this.tx, this.ty);
-      fireworks.splice(index,1);
+
+    if (this.distanceTraveled >= this.distanceToTarget) {
+      createParticles(this.tx, this.ty);
+      fireworks.splice(index, 1);
     } else {
       this.x += vx;
       this.y += vy;
@@ -155,10 +186,9 @@ class Firework {
 
   draw() {
     ctx.beginPath();
-    ctx.moveTo(this.coordinates[this.coordinates.length-1][0], this.coordinates[this.coordinates.length-1][1]);
-    ctx.lineTo(this.x, this.y);
-    ctx.strokeStyle = `hsl(${Math.random()*360}, 100%, ${this.brightness}%)`;
-    ctx.stroke();
+    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = "pink";
+    ctx.fill();
   }
 }
 
@@ -166,44 +196,24 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.coordinates = [];
-    this.coordinateCount = 5;
-    while(this.coordinateCount--) {
-      this.coordinates.push([this.x, this.y]);
-    }
     this.angle = Math.random() * 2 * Math.PI;
-    this.speed = Math.random() * 4 + 2;
-    this.friction = 0.95;
-    this.gravity = 0.5;
-    this.hue = Math.random() * 360;
+    this.speed = Math.random() * 5 + 2;
     this.alpha = 1;
-    this.decay = Math.random() * 0.015 + 0.015;
-    this.size = Math.random() * 8 + 4;
-    this.shapeAngle = Math.random() * 2 * Math.PI;
+    this.decay = 0.02;
   }
 
   update(index) {
-    this.coordinates.pop();
-    this.coordinates.unshift([this.x, this.y]);
-    this.speed *= this.friction;
     this.x += Math.cos(this.angle) * this.speed;
-    this.y += Math.sin(this.angle) * this.speed + this.gravity;
+    this.y += Math.sin(this.angle) * this.speed;
     this.alpha -= this.decay;
-    if(this.alpha <= 0.1) particles.splice(index,1);
+    if (this.alpha <= 0) particles.splice(index, 1);
   }
 
   draw() {
-    ctx.save();
     ctx.globalAlpha = this.alpha;
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.shapeAngle);
-    ctx.fillStyle = `hsl(${this.hue},100%,60%)`;
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.bezierCurveTo(-this.size/2,-this.size/2, -this.size,this.size/3, 0,this.size);
-    ctx.bezierCurveTo(this.size,this.size/3, this.size/2,-this.size/2,0,0);
-    ctx.fill();
-    ctx.restore();
+    ctx.font = "20px Arial";
+    ctx.fillText("❤️", this.x, this.y);
+    ctx.globalAlpha = 1;
   }
 }
 
@@ -213,19 +223,16 @@ function distance(aX, aY, bX, bY){
   return Math.sqrt(x*x + y*y);
 }
 
-function createHeartParticles(x, y){
-  let num = 25; // hearts per explosion
-  for(let i=0;i<num;i++){
+function createParticles(x, y){
+  for(let i=0;i<25;i++){
     particles.push(new Particle(x, y));
   }
 }
 
 function loop(){
+  if(!animationRunning) return;
   requestAnimationFrame(loop);
-  ctx.globalCompositeOperation = 'destination-out';
-  ctx.fillStyle = 'rgba(0,0,0,0.5)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.globalCompositeOperation = 'lighter';
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
   let i = fireworks.length;
   while(i--){
@@ -241,9 +248,12 @@ function loop(){
 }
 loop();
 
+
 // ================= Yes Button =================
 yesBtn.addEventListener('click', ()=>{
-  // Launch fireworks every 200ms
+
+  document.body.classList.add("shake");
+
   const interval = setInterval(()=>{
     const startX = canvas.width/2;
     const startY = canvas.height;
@@ -252,22 +262,32 @@ yesBtn.addEventListener('click', ()=>{
     fireworks.push(new Firework(startX,startY,targetX,targetY));
   },200);
 
-  // Stop fireworks after 4 seconds and redirect
   setTimeout(()=>{
     clearInterval(interval);
+    clearInterval(heartsInterval);
+    animationRunning = false;
+    document.body.classList.remove("shake");
+
     setTimeout(()=>{
-      window.location.href = 'quotes.html';
-    },1500);
+      window.location.href = "quotes.html";
+    },500);
+
   },4000);
 });
 
-// Fullscreen canvas on resize
+
+// Resize
 window.addEventListener('resize', ()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
+
 </script>
 
 </body>
 </html>
+
+</body>
+</html>
+
 
