@@ -130,15 +130,21 @@ function showNewQuote() {
   index = 0;
   quoteEl.textContent = "";
 
-  // Show secret message on 3rd tap
   if (tapCount === 3) {
     currentQuote = secretMessage;
   } else {
-    currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    let newQuote;
+
+    do {
+      newQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    } while (newQuote === currentQuote); // Prevent same quote
+
+    currentQuote = newQuote;
   }
 
   typeWriter();
 }
+
 
 showNewQuote();
 document.body.addEventListener("click", showNewQuote);
@@ -160,3 +166,8 @@ setInterval(() => {
 
 </body>
 </html>
+
+
+</body>
+</html>
+
