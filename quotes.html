@@ -18,7 +18,6 @@
     justify-content: center;
     align-items: center;
 
-    /* Background fully visible */
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
     background-color: #f5f5f5;
 
@@ -28,13 +27,6 @@
     padding: 16px;
     overflow: hidden;
     cursor: pointer;
-  }
-
-  h1 {
-    font-size: clamp(18px, 5vw, 24px);
-    margin-bottom: 16px;
-    animation: fadeUp 1.5s ease forwards;
-    text-shadow: 2px 2px 10px rgba(16, 76, 188, 0.4);
   }
 
   p {
@@ -57,6 +49,16 @@
     }
   }
 
+  /* Glowing name */
+  .glow {
+    color: #ff1e56;
+    font-weight: bold;
+    text-shadow: 
+      0 0 5px #ff1e56,
+      0 0 10px #ff4d6d,
+      0 0 20px #ff85a2;
+  }
+
   /* Floating hearts */
   .heart {
     position: fixed;
@@ -76,7 +78,6 @@
     }
   }
 
-  /* Click hint */
   .hint {
     position: fixed;
     bottom: 16px;
@@ -84,7 +85,6 @@
     opacity: 0.7;
   }
 
-  /* Extra spacing for very small phones */
   @media (max-height: 600px) {
     body {
       justify-content: flex-start;
@@ -109,9 +109,12 @@ const quotes = [
   `With you, everything feels right, ${crushName}.`
 ];
 
+const secretMessage = "Okay… but the truth is… I really, really like you ❤️";
+
 const quoteEl = document.getElementById("quote");
 let index = 0;
 let currentQuote = "";
+let tapCount = 0;
 
 function typeWriter() {
   if (index < currentQuote.length) {
@@ -122,9 +125,18 @@ function typeWriter() {
 }
 
 function showNewQuote() {
+  tapCount++;
+
   index = 0;
   quoteEl.textContent = "";
-  currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+  // Show secret message on 3rd tap
+  if (tapCount === 3) {
+    currentQuote = secretMessage;
+  } else {
+    currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
+  }
+
   typeWriter();
 }
 
@@ -142,8 +154,9 @@ setInterval(() => {
 
   setTimeout(() => heart.remove(), 5000);
 }, 900);
+
 </script>
+
 
 </body>
 </html>
-
